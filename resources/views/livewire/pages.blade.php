@@ -15,6 +15,7 @@
                 <x-jet-label for="title" value="{{ __('Title') }}" />
                 <x-jet-input id="title" class="block w-full mt-1" type="text" required
                     wire:model.debounce.800ms='title' />
+                <x-jet-input-error for="title" class="mt-2" />
             </div>
             <div class="mt-4">
                 <x-jet-label for="slug" value="{{ __('Slug') }}" />
@@ -27,17 +28,20 @@
                         class="flex-1 block w-full transition duration-150 ease-in-out rounded-none form-input rounded-r-md sm:text-sm sm:leading-5"
                         placeholder="url-slug">
                 </div>
+                <x-jet-input-error for="slug" class="mt-2" />
             </div>
             <div class="mt-4">
                 <x-jet-label for="content" value="{{ __('Content') }}" />
                 <div class="rounded-md shadow-sm">
                     <div class="mt-1 bg-white">
                         <div class="body-content" wire:ignore>
-                            <trix-editor class="trix-content" x-ref="trix" wire:model.debounce.100000ms="content" wire:key='trix-content-unique-key'>
+                            <trix-editor class="trix-content" x-ref="trix" wire:model.debounce.100000ms="content"
+                                wire:key='trix-content-unique-key'>
                             </trix-editor>
                         </div>
                     </div>
                 </div>
+                <x-jet-input-error for="content" class="mt-2" />
             </div>
         </x-slot>
 
@@ -46,9 +50,9 @@
                 {{ __('Cancel') }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
-                {{ __('Delete Account') }}
-            </x-jet-danger-button>
+            <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
+                {{ __('Save') }}
+            </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>
 </div>
