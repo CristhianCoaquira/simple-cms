@@ -4,6 +4,61 @@
             {{ __('Create') }}
         </x-jet-button>
     </div>
+    {{-- The Data Table --}}
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Title</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Link</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Content</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($data as $item)
+                            <tr>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->title }}</td>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">
+                                    <a href="{{ URL::to('/' . $item->slug) }}" target="_blank"
+                                        class="text-indigo-600 hover:text-indigo-900">
+                                        {{ $item->slug }}
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">{!! $item->content !!}</td>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">
+                                    <x-jet-button wire:click='updateShowModal({{ $item->id }})'>
+                                        {{ __('Edit') }}
+                                    </x-jet-button>
+                                    <x-jet-danger-button wire:click='deleteShowModal({{ $item->id }})'>
+                                        {{ __('Delete') }}
+                                    </x-jet-danger-button>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap" colspan="4">No Results Found</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    {{ $data->links() }}
     {{-- Modal Form --}}
     <x-jet-dialog-modal wire:model="modalFormVisible">
         <x-slot name="title">
@@ -32,6 +87,7 @@
             </div>
             <div class="mt-4">
                 <x-jet-label for="content" value="{{ __('Content') }}" />
+                <x-jet-label for="content" value="{{ __('Actions') }}" />
                 <div class="rounded-md shadow-sm">
                     <div class="mt-1 bg-white">
                         <div class="body-content" wire:ignore>
@@ -49,10 +105,35 @@
             <x-jet-secondary-button wire:click="$toggle('modalFormVisible')" wire:loading.attr="disabled">
                 {{ __('Cancel') }}
             </x-jet-secondary-button>
-
+            @if ($modelId)
+            <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
+                {{ __('Update') }}
+            </x-jet-button>
+            @else
             <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
                 {{ __('Save') }}
             </x-jet-button>
+            @endif
+        </x-slot>
+    </x-jet-dialog-modal>
+    {{-- Delete Page Confirmation Modal --}}
+    <x-jet-dialog-modal wire:model="modalConfirmDeleteVisible">
+        <x-slot name="title">
+            {{ __('Delete Page') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Are you sure you want to delete your page? Once your page is deleted, all of its resources and data will be permanently deleted.') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('modalConfirmDeleteVisible')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-danger-button class="ml-2" wire:click="delete" wire:loading.attr="disabled">
+                {{ __('Delete') }}
+            </x-jet-danger-button>
         </x-slot>
     </x-jet-dialog-modal>
 </div>
