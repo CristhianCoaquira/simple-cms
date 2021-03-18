@@ -14,7 +14,8 @@
                             <tr>
                                 <th
                                     class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                    Title</th>
+                                    Title
+                                </th>
                                 <th
                                     class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
                                     Link</th>
@@ -29,7 +30,13 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($data as $item)
                             <tr>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->title }}</td>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">
+                                    {{ $item->title }}
+                                    {!! $item->is_default_home ? '<span class="text-green-400">[Default Home
+                                        Page]</span>' : '' !!}
+                                    {!! $item->is_default_not_found ? '<span class="text-red-400">[Default Not Found
+                                        Page]</span>' : '' !!}
+                                </td>
                                 <td class="px-6 py-4 text-sm whitespace-nowrap">
                                     <a href="{{ URL::to('/' . $item->slug) }}" target="_blank"
                                         class="text-indigo-600 hover:text-indigo-900">
@@ -39,7 +46,7 @@
                                 <td class="px-6 py-4 text-sm whitespace-nowrap">{!! $item->content !!}</td>
                                 <td class="px-6 py-4 text-sm whitespace-nowrap">
                                     <x-jet-button wire:click='updateShowModal({{ $item->id }})'>
-                                        {{ __('Edit') }}
+                                        {{ __('Update') }}
                                     </x-jet-button>
                                     <x-jet-danger-button wire:click='deleteShowModal({{ $item->id }})'>
                                         {{ __('Delete') }}
@@ -86,8 +93,19 @@
                 <x-jet-input-error for="slug" class="mt-2" />
             </div>
             <div class="mt-4">
+                <label class="flex items-center">
+                    <x-jet-checkbox wire:model="isSetToDefaultHomePage" />
+                    <span class="ml-2 text-sm text-gray-600">Set as the default home page</span>
+                </label>
+            </div>
+            <div class="mt-4">
+                <label class="flex items-center">
+                    <x-jet-checkbox wire:model="isSetToDefaultNotFoundPage" />
+                    <span class="ml-2 text-sm text-red-600">Set as the default 404 error page</span>
+                </label>
+            </div>
+            <div class="mt-4">
                 <x-jet-label for="content" value="{{ __('Content') }}" />
-                <x-jet-label for="content" value="{{ __('Actions') }}" />
                 <div class="rounded-md shadow-sm">
                     <div class="mt-1 bg-white">
                         <div class="body-content" wire:ignore>

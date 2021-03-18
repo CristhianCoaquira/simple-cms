@@ -15,6 +15,8 @@ class Pages extends Component
     public $title;
     public $slug;
     public $content;
+    public $isSetToDefaultHomePage;
+    public $isSetToDefaultNotFoundPage;
 
     public $modalFormVisible = false;
     public $modalConfirmDeleteVisible = false;
@@ -49,6 +51,8 @@ class Pages extends Component
     public function create()
     {
         $this->validate();
+        $this->unassignDefaultHomePage();
+        $this->unassignDefaultNotFoundPage();
         Page::create($this->getModelData());
         $this->reset();
     }
@@ -63,6 +67,8 @@ class Pages extends Component
     public function update()
     {
         $this->validate();
+        $this->unassignDefaultHomePage();
+        $this->unassignDefaultNotFoundPage();
         Page::find($this->modelId)->update($this->getModelData());
         $this->modalFormVisible = false;
         $this->reset();
@@ -85,12 +91,24 @@ class Pages extends Component
         $this->slug = strtolower(str_replace(' ', '-', $value));
     }
 
+    public function updatedIsSetToDefaultHomePage()
+    {
+        $this->isSetToDefaultNotFoundPage = null;
+    }
+
+    public function updatedIsSetToDefaultNotFoundPage()
+    {
+        $this->isSetToDefaultHomePage = null;
+    }
+
     public function getModelData()
     {
         return [
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
+            'is_default_home' => $this->isSetToDefaultHomePage,
+            'is_default_not_found' => $this->isSetToDefaultNotFoundPage,
         ];
     }
 
@@ -100,6 +118,26 @@ class Pages extends Component
         $this->title = $page->title;
         $this->slug = $page->slug;
         $this->content = $page->content;
+        $this->isSetToDefaultHomePage = $page->is_default_home;
+        $this->isSetToDefaultNotFoundPage = $page->is_default_not_found;
+    }
+
+    private function unassignDefaultHomePage()
+    {
+        if ($this->isSetToDefaultHomePage) {
+            Page::where('is_default_home', true)->update([
+                'is_default_home' => false,
+            ]);
+        }
+    }
+
+    private function unassignDefaultNotFoundPage()
+    {
+        if ($this->isSetToDefaultNotFoundPage) {
+            Page::where('is_default_not_found', true)->update([
+                'is_default_not_found' => false,
+            ]);
+        }
     }
 
     public function render()

@@ -9,7 +9,6 @@ class Frontpage extends Component
 {
     public $title;
     public $content;
-    public $urlslug;
 
     public function mount($urlslug)
     {
