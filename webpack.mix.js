@@ -1,3 +1,4 @@
+const { browserSync } = require('laravel-mix');
 const mix = require('laravel-mix');
 
 /*
@@ -16,7 +17,10 @@ mix.js('resources/js/app.js', 'public/js')
         require('postcss-import'),
         require('tailwindcss'),
         require('autoprefixer'),
-    ]);
+    ]).browserSync({
+        proxy:'nginx', //web server container 
+        open:false
+    });
 
 if (mix.inProduction()) {
     mix.version();
