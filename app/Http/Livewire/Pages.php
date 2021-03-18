@@ -6,7 +6,7 @@ use App\Models\Page;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
-
+use Illuminate\Support\Str;
 class Pages extends Component
 {
     use WithPagination;
@@ -88,7 +88,7 @@ class Pages extends Component
 
     public function updatedTitle($value)
     {
-        $this->slug = strtolower(str_replace(' ', '-', $value));
+        $this->slug = Str::slug($value);
     }
 
     public function updatedIsSetToDefaultHomePage()
