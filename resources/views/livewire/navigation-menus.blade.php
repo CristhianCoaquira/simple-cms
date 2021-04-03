@@ -14,14 +14,17 @@
                             <tr>
                                 <th
                                     class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                    Title
+                                    Label</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Url</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Sequence</th>
+                                <th
+                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                                    Type
                                 </th>
-                                <th
-                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                    Link</th>
-                                <th
-                                    class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
-                                    Content</th>
                                 <th
                                     class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50">
                                     Actions</th>
@@ -30,21 +33,16 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($data as $item)
                             <tr>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->label }}</td>
                                 <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                    {{ $item->title }}
-                                    {!! $item->is_default_home ? '<span class="text-green-400">[Default Home
-                                        Page]</span>' : '' !!}
-                                    {!! $item->is_default_not_found ? '<span class="text-red-400">[Default Not Found
-                                        Page]</span>' : '' !!}
-                                </td>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                    <a href="{{ URL::to('/' . $item->slug) }}" target="_blank"
-                                        class="text-indigo-600 hover:text-indigo-900">
+                                    <a href="{{ $item->slug }}" class="text-indigo-600 hover:text-indigo-900"
+                                        target="_blank">
                                         {{ $item->slug }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">{!! $item->content_limit !!}</td>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->sequence }}</td>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->type }}</td>
+                                <td>
                                     <x-jet-button wire:click='updateShowModal({{ $item->id }})'>
                                         {{ __('Update') }}
                                     </x-jet-button>
@@ -55,7 +53,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap" colspan="4">No Results Found</td>
+                                <td class="px-6 py-4 text-sm whitespace-nowrap" colspan="5">No Results Found</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -69,15 +67,15 @@
     {{-- Modal Form --}}
     <x-jet-dialog-modal wire:model="modalFormVisible">
         <x-slot name="title">
-            {{ __('Save Page') }}
+            {{ __('Navigation Menu') }}
         </x-slot>
 
         <x-slot name="content">
             <div class="mt-4">
-                <x-jet-label for="title" value="{{ __('Title') }}" />
-                <x-jet-input id="title" class="block w-full mt-1" type="text" required
-                    wire:model.debounce.800ms='title' />
-                <x-jet-input-error for="title" class="mt-2" />
+                <x-jet-label for="label" value="{{ __('Label') }}" />
+                <x-jet-input id="label" class="block w-full mt-1" type="text" required
+                    wire:model.debounce.800ms='label' />
+                <x-jet-input-error for="label" class="mt-2" />
             </div>
             <div class="mt-4">
                 <x-jet-label for="slug" value="{{ __('Slug') }}" />
@@ -86,36 +84,24 @@
                         class="inline-flex items-center px-3 text-sm text-gray-500 border border-r-0 border-gray-300 rounded-l-md bg-gray-50">
                         http://localhost:8000/
                     </span>
-                    <input wire:model="slug"
+                    <x-jet-input id="slug"
                         class="flex-1 block w-full transition duration-150 ease-in-out rounded-none form-input rounded-r-md sm:text-sm sm:leading-5"
-                        placeholder="url-slug">
+                        type="text" required wire:model='slug' />
                 </div>
                 <x-jet-input-error for="slug" class="mt-2" />
             </div>
             <div class="mt-4">
-                <label class="flex items-center">
-                    <x-jet-checkbox wire:model="isSetToDefaultHomePage" />
-                    <span class="ml-2 text-sm text-gray-600">Set as the default home page</span>
-                </label>
+                <x-jet-label for="sequence" value="{{ __('Sequence') }}" />
+                <x-jet-input id="sequence" class="block w-full mt-1" type="number" required wire:model='sequence' />
+                <x-jet-input-error for="sequence" class="mt-2" />
             </div>
             <div class="mt-4">
-                <label class="flex items-center">
-                    <x-jet-checkbox wire:model="isSetToDefaultNotFoundPage" />
-                    <span class="ml-2 text-sm text-red-600">Set as the default 404 error page</span>
-                </label>
-            </div>
-            <div class="mt-4">
-                <x-jet-label for="content" value="{{ __('Content') }}" />
-                <div class="rounded-md shadow-sm">
-                    <div class="mt-1 bg-white">
-                        <div class="body-content" wire:ignore>
-                            <trix-editor class="trix-content" x-ref="trix" wire:model.debounce.100000ms="content"
-                                wire:key='trix-content-unique-key'>
-                            </trix-editor>
-                        </div>
-                    </div>
-                </div>
-                <x-jet-input-error for="content" class="mt-2" />
+                <x-jet-label for="type" value="{{ __('Type') }}" />
+                <select id="type" wire:model='type'
+                    class="block w-full px-4 py-3 pr-8 leading-tight text-gray-700 bg-gray-100 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="SidebarNav">SidebarNav</option>
+                    <option value="TopNav">TopNav</option>
+                </select>
             </div>
         </x-slot>
 
@@ -134,10 +120,10 @@
             @endif
         </x-slot>
     </x-jet-dialog-modal>
-    {{-- Delete Page Confirmation Modal --}}
+    {{-- Delete Navigation Menu Confirmation Modal --}}
     <x-jet-dialog-modal wire:model="modalConfirmDeleteVisible">
         <x-slot name="title">
-            {{ __('Delete Page') }}
+            {{ __('Delete Navigation Menu') }}
         </x-slot>
 
         <x-slot name="content">

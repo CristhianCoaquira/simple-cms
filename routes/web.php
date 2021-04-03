@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('pages', 'admin.pages')->name('pages');
+    Route::view('menus', 'admin.navigation-menus')->name('navigation-menus');
 });
 
 Route::get('/', Frontpage::class);

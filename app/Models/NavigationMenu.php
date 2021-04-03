@@ -4,16 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
-class Page extends Model
+class NavigationMenu extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    public function getContentLimitAttribute($key)
-    {
-        return Str::limit($this->content, 50, '...');
-    }
 }
