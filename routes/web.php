@@ -18,6 +18,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'accessrole']], funct
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('pages', 'admin.pages')->name('pages');
     Route::view('menus', 'admin.navigation-menus')->name('navigation-menus');
+    Route::view('users', 'admin.users')->name('users');
+    Route::view('user-permissions', 'admin.user-permissions')->name('user-permissions');
 });
 
 Route::get('/', Frontpage::class);
