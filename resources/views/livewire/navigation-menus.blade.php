@@ -32,29 +32,29 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($data as $item)
-                            <tr>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->label }}</td>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                    <a href="{{ $item->slug }}" class="text-indigo-600 hover:text-indigo-900"
-                                        target="_blank">
-                                        {{ $item->slug }}
-                                    </a>
-                                </td>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->sequence }}</td>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->type }}</td>
-                                <td>
-                                    <x-jet-button wire:click='updateShowModal({{ $item->id }})'>
-                                        {{ __('Update') }}
-                                    </x-jet-button>
-                                    <x-jet-danger-button wire:click='deleteShowModal({{ $item->id }})'>
-                                        {{ __('Delete') }}
-                                    </x-jet-danger-button>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->label }}</td>
+                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
+                                        <a href="{{ $item->slug }}" class="text-indigo-600 hover:text-indigo-900"
+                                            target="_blank">
+                                            {{ $item->slug }}
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->sequence }}</td>
+                                    <td class="px-6 py-4 text-sm whitespace-nowrap">{{ $item->type }}</td>
+                                    <td>
+                                        <x-jet-button wire:click='updateShowModal({{ $item->id }})'>
+                                            {{ __('Update') }}
+                                        </x-jet-button>
+                                        <x-jet-danger-button wire:click='deleteShowModal({{ $item->id }})'>
+                                            {{ __('Delete') }}
+                                        </x-jet-danger-button>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td class="px-6 py-4 text-sm whitespace-nowrap" colspan="5">No Results Found</td>
-                            </tr>
+                                <tr>
+                                    <td class="px-6 py-4 text-sm whitespace-nowrap" colspan="5">No Results Found</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -110,13 +110,13 @@
                 {{ __('Cancel') }}
             </x-jet-secondary-button>
             @if ($modelId)
-            <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
-                {{ __('Update') }}
-            </x-jet-button>
+                <x-jet-button class="ml-2" wire:click="update" wire:loading.attr="disabled">
+                    {{ __('Update') }}
+                </x-jet-button>
             @else
-            <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
-                {{ __('Save') }}
-            </x-jet-button>
+                <x-jet-button class="ml-2" wire:click="create" wire:loading.attr="disabled">
+                    {{ __('Save') }}
+                </x-jet-button>
             @endif
         </x-slot>
     </x-jet-dialog-modal>

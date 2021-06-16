@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use App\Models\{{modelClass}};
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class {{class}} extends Component
+{
+    use WithPagination;
+
+    public $modalFormVisible = false;
+    public $modalConfirmDeleteVisible = false;
+    public $modelId;
+
+    /**
+     * Put your custom properties here
+     */
+
+    /**
+     * Validation rules
+     */
+    public function rules()
+    {
+        return [
+        ];
+    }
+
+        public function mount()
+    {
+        // Resets the pagination after reload
+        $this->resetPage();
+    }
+
+    public function createShowModal()
+    {
+        $this->resetValidation();
+        $this->reset();
+        $this->modalFormVisible = true;
+    }
+
+    public function create()
+    {
+        $this->validate();
+        {{modelClass}}::create($this->getModelData());
+        $this->reset();
+    }
+
+    public function updateShowModal({{modelClass}} $navigation_menu)
+    {
+        $this->resetValidation();
+        $this->setModelData($navigation_menu);
+        $this->modalFormVisible = true;
+    }
+
+    public function update()
+    {
+        $this->validate();
+        {{modelClass}}::find($this->modelId)->update($this->getModelData());
+        $this->reset();
+    }
+
+    public function deleteShowModal($id)
+    {
+        $this->modelId = $id;
+        $this->modalConfirmDeleteVisible = true;
+    }
+
+    public function delete()
+    {
+        {{modelClass}}::destroy($this->modelId);
+        $this->reset();
+    }
+
+    public function getModelData()
+    {
+
+    }
+
+    public function setModelData({{modelClass}} $model)
+    {
+
+    }
+
+    public function render()
+    {
+        return view('livewire.{{viewName}}', [
+            'data' => {{modelClass}}::paginate(5)
+        ]);
+    }
+}
