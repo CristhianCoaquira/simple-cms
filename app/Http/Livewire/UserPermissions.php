@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\User;
 use App\Models\UserPermission;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -50,6 +51,7 @@ class UserPermissions extends Component
     public function create()
     {
         $this->validate();
+        Gate::authorize('admin');
         UserPermission::create($this->getModelData());
         $this->reset();
     }
@@ -64,6 +66,7 @@ class UserPermissions extends Component
     public function update()
     {
         $this->validate();
+        Gate::authorize('admin');
         UserPermission::find($this->modelId)->update($this->getModelData());
         $this->reset();
     }
